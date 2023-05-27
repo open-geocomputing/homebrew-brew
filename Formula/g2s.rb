@@ -5,6 +5,12 @@ class G2s < Formula
   url "https://github.com/GAIA-UNIL/G2S/archive/ff1068108ed8661ab01ad2907a3de39d009e9d0a.tar.gz"
   sha256 "1b97c33f6e39f1f84fad067e6f24afe096ca2ad6c246b455e5e7e38bdbf38567"
   license "GPL-3.0-only"
+
+   bottle do
+    root_url "https://raw.githubusercontent.com/open-geocomputing/homebrew-brew/master/Bottle/"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "ce3fbe276048c7a1675da2fb2a2a01d3a87a6c19d449d7f9b7056611850a8561"
+  end
     
   option "with-intel", "Use intel compiler if available (x86_64 only)"
   option "with-intel-static", "Use intel compiler if available (x86_64 only) and compile files without intel dependencies"
