@@ -2,8 +2,8 @@ class G2s < Formula
   desc "Toolbox for geostatistical simulations"
   homepage "https://gaia-unil.github.io/G2S/"
   version "0.98.015"
-  url "https://github.com/GAIA-UNIL/G2S/archive/1382329bfddbf0f82f1de36ad94657141b177323.tar.gz"
-  sha256 "adf1fce07ebbaca844bbcaf00b602ba40a242dcbd759dc880bacf50eba0b0d27"
+  url "https://github.com/GAIA-UNIL/G2S/archive/ff1068108ed8661ab01ad2907a3de39d009e9d0a.tar.gz"
+  sha256 "1b97c33f6e39f1f84fad067e6f24afe096ca2ad6c246b455e5e7e38bdbf38567"
   license "GPL-3.0-only"
     
   option "with-intel", "Use intel compiler if available (x86_64 only)"
@@ -54,13 +54,15 @@ class G2s < Formula
     if !intel_path.nil? && Hardware::CPU.arch == :x86_64
       cd "build" do
           # Run "make c++ -j"
-          system "make", "intel", "-j",extraFlagForStatic, "CXXFLAGS=-fopenmp -DWITH_MKL -I#{Formula["jsoncpp"].opt_include} -I#{Formula["cppzmq"].opt_include} -std=c++17 -w",
-          "LIB_PATH=-B#{gccLibPath.chomp} -L#{Formula["zlib"].opt_lib} -lz"
+          system "make", "intel", "-j", extraFlagForStatic, "CXXFLAGS=-fopenmp -DWITH_MKL -I#{Formula["jsoncpp"].opt_include} -I#{Formula["cppzmq"].opt_include} -std=c++17",
+          "LIB_PATH= -fuse-ld=lld -L#{Formula["zlib"].opt_lib} -lz -L#{Formula["cppzmq"].opt_lib} -L#{Formula["jsoncpp"].opt_lib}"
+
+          system "make", "c++-server", "-j"
         end
 
         # Copy g2s_server and other from the c++-build folder to the brew bin folder
         bin.install "build/g2s-package/g2s-brew/g2s"
-        libexec.install "build/intel-build/g2s_server"
+        libexec.install "build/c++-build/g2s_server"
         libexec.install "build/intel-build/echo"
         libexec.install "build/intel-build/qs"
         libexec.install "build/intel-build/nds"
