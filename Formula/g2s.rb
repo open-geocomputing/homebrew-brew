@@ -2,16 +2,11 @@ class G2s < Formula
   desc "Toolbox for geostatistical simulations"
   homepage "https://gaia-unil.github.io/G2S/"
   version "0.98.015"
-  url "https://github.com/GAIA-UNIL/G2S/archive/ac3cede9c1f098a1f232463141e23d752dd714e3.tar.gz"
-  sha256 "dbca5a45e2014040ac3fd262570ff960464fdd3228c3b92b733f504ff20ad8fa"
+  url "https://github.com/GAIA-UNIL/G2S/archive/9e781d8b81402e05c877988ded3295710403a369.tar.gz"
+  sha256 "22eeda81c3a4a4a6be56a72fe5eb4e4151a96c8c26f7d76b1d9f3b4bd2b6bc2d"
   license "GPL-3.0-only"
     
-  bottle do
-    root_url "brew-bottles.open-geocomputing.org/"
-    rebuild 4
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "ee8d8cb06c016941c62c7468e06f53e032f93d1a3c894760231c733fee744f48"
-  end
-
+  
   option "with-cuda", "Compile with cuda support"
   option "with-intel", "Use intel compiler if available (x86_64 only)"
   option "with-intel-static", "Use intel compiler if available (x86_64 only) and compile files without intel dependencies"
