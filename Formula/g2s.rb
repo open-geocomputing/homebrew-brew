@@ -6,11 +6,11 @@ class G2s < Formula
   sha256 "95ee0e752cdf1e146284ce3c3f6d13680c68d35178a86c85409ea1fbe63ca970"
   license "GPL-3.0-only"
   
-  # bottle do
-  #   root_url "https://raw.githubusercontent.com/open-geocomputing/homebrew-brew/master/Bottle/"
-  #   rebuild 1
-  #   sha256 cellar: :any_skip_relocation, x86_64_linux: "ce3fbe276048c7a1675da2fb2a2a01d3a87a6c19d449d7f9b7056611850a8561"
-  # end
+  bottle do
+    root_url "brew-bottles.open-geocomputing.org/"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "c8e7a88cc58b61cced6242fcdaf76ca85fd8a82d5b07ce07450b9e8c7563fa92"
+  end
   
   option "with-intel", "Use intel compiler if available (x86_64 only)"
   option "with-intel-static", "Use intel compiler if available (x86_64 only) and compile files without intel dependencies"
