@@ -2,16 +2,16 @@ class G2s < Formula
   desc "Toolbox for geostatistical simulations"
   homepage "https://gaia-unil.github.io/G2S/"
   version "0.98.015"
-  url "https://github.com/GAIA-UNIL/G2S/archive/ff1068108ed8661ab01ad2907a3de39d009e9d0a.tar.gz"
-  sha256 "1b97c33f6e39f1f84fad067e6f24afe096ca2ad6c246b455e5e7e38bdbf38567"
+  url "https://github.com/GAIA-UNIL/G2S/archive/3a69f487164e2becf36e414044f64a8f1a678387.tar.gz"
+  sha256 "95ee0e752cdf1e146284ce3c3f6d13680c68d35178a86c85409ea1fbe63ca970"
   license "GPL-3.0-only"
-
-   bottle do
-    root_url "https://raw.githubusercontent.com/open-geocomputing/homebrew-brew/master/Bottle/"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "ce3fbe276048c7a1675da2fb2a2a01d3a87a6c19d449d7f9b7056611850a8561"
-  end
-    
+  
+  # bottle do
+  #   root_url "https://raw.githubusercontent.com/open-geocomputing/homebrew-brew/master/Bottle/"
+  #   rebuild 1
+  #   sha256 cellar: :any_skip_relocation, x86_64_linux: "ce3fbe276048c7a1675da2fb2a2a01d3a87a6c19d449d7f9b7056611850a8561"
+  # end
+  
   option "with-intel", "Use intel compiler if available (x86_64 only)"
   option "with-intel-static", "Use intel compiler if available (x86_64 only) and compile files without intel dependencies"
   
@@ -21,7 +21,7 @@ class G2s < Formula
   depends_on "jsoncpp"
   depends_on "libomp" if !build.with? 'intel' or !build.with? 'intel-static'
   depends_on "zeromq"
-  uses_from_macos "curl"
+  # uses_from_macos "curl"
   uses_from_macos "zlib"
 
   def source_intel
@@ -36,8 +36,31 @@ class G2s < Formula
     end
   end
 
-  def install
+  def findCuda
+    search_path = "/usr/local/cuda-*"
+    cuda_paths = Dir.glob(search_path).select do |path|
+      File.basename(path).match(/^cuda-(\d+\.\d+)$/)
+    end
 
+    cuda_path=cuda_paths.sort_by { |path| Gem::Version.new(File.basename(path).match(/^cuda-(\d+\.\d+)$/)[1]) }.last
+
+    if cuda_path
+      # Add it to the PATH environment variable
+      ENV['PATH'] = "#{cuda_path}/bin:#{ENV['PATH']}"
+
+      # And to LD_LIBRARY_PATH
+      ENV['LD_LIBRARY_PATH'] = "#{cuda_path}/lib64:#{ENV['LD_LIBRARY_PATH']}"
+
+      puts "CUDA path #{cuda_path} added to PATH and LD_LIBRARY_PATH."
+    else
+      puts "No CUDA installation found."
+    end
+
+  end
+
+  
+  def install
+    findCuda
     intel_path=nil
 
     if build.with? "intel" or build.with? "intel-static"
@@ -56,14 +79,16 @@ class G2s < Formula
     if  build.with? "intel-static"
       extraFlagForStatic="AS_STATIC=1"
     end
-  
+
     if !intel_path.nil? && Hardware::CPU.arch == :x86_64
       cd "build" do
-          # Run "make c++ -j"
-          system "make", "intel", "-j", extraFlagForStatic, "CXXFLAGS=-fopenmp -DWITH_MKL -I#{Formula["jsoncpp"].opt_include} -I#{Formula["cppzmq"].opt_include} -std=c++17",
+          puts "make", "intel", "-j", "USE_CURL=no", extraFlagForStatic, "CXXFLAGS=-fopenmp -DWITH_MKL -I#{Formula["jsoncpp"].opt_include} -I#{Formula["cppzmq"].opt_include} -std=c++17",
           "LIB_PATH= -fuse-ld=lld -L#{Formula["zlib"].opt_lib} -lz -L#{Formula["cppzmq"].opt_lib} -L#{Formula["jsoncpp"].opt_lib}"
 
-          system "make", "c++-server", "-j"
+          system "make", "intel", "-j", "USE_CURL=no", extraFlagForStatic, "CXXFLAGS=-fopenmp -DWITH_MKL -I#{Formula["jsoncpp"].opt_include} -I#{Formula["cppzmq"].opt_include} -std=c++17",
+          "LIB_PATH= -fuse-ld=lld -L#{Formula["zlib"].opt_lib} -lz -L#{Formula["cppzmq"].opt_lib} -L#{Formula["jsoncpp"].opt_lib}"
+
+          system "make", "c++-server", "-j", "USE_CURL=no"
         end
 
         # Copy g2s_server and other from the c++-build folder to the brew bin folder
@@ -90,7 +115,9 @@ class G2s < Formula
 
         cd "build" do
           # Run "make c++ -j"
-          system "make", "c++", "-j", "CXXFLAGS=#{cxxflags} -I#{Formula["fftw"].opt_include}", \
+          puts "make", "c++", "-j", "USE_CURL=no", "CXXFLAGS=#{cxxflags} -I#{Formula["fftw"].opt_include}", \
+              "LIB_PATH=-L#{Formula["fftw"].opt_lib} -L#{Formula["libomp"].opt_lib} -lomp"
+          system "make", "c++", "-j", "USE_CURL=no", "CXXFLAGS=#{cxxflags} -I#{Formula["fftw"].opt_include}", \
               "LIB_PATH=-L#{Formula["fftw"].opt_lib} -L#{Formula["libomp"].opt_lib} -lomp"
         end
 
