@@ -6,7 +6,12 @@ class G2s < Formula
   sha256 "22eeda81c3a4a4a6be56a72fe5eb4e4151a96c8c26f7d76b1d9f3b4bd2b6bc2d"
   license "GPL-3.0-only"
     
-  
+  bottle do
+    root_url "brew-bottles.open-geocomputing.org/"
+    rebuild 5
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "37f5360bf1fabb33773c0081214f82b262168d95089a2cb061544034a8d63bc8"
+  end
+
   option "with-cuda", "Compile with cuda support"
   option "with-intel", "Use intel compiler if available (x86_64 only)"
   option "with-intel-static", "Use intel compiler if available (x86_64 only) and compile files without intel dependencies"
