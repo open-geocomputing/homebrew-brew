@@ -2,16 +2,12 @@ class G2s < Formula
   desc "Toolbox for geostatistical simulations"
   homepage "https://gaia-unil.github.io/G2S/"
   version "0.98.015"
-  url "https://github.com/GAIA-UNIL/G2S/archive/ca0775b680df1d4d3cfe4423be1fa67b9f488699.tar.gz"
-  sha256 "f594c33f2dcfba18cf647e16854700842b64ecbfdaa795eab8a9e8309b954a1c"
+  url "https://github.com/GAIA-UNIL/G2S/archive/ac3cede9c1f098a1f232463141e23d752dd714e3.tar.gz"
+  sha256 "dbca5a45e2014040ac3fd262570ff960464fdd3228c3b92b733f504ff20ad8fa"
   license "GPL-3.0-only"
+    
   
-  bottle do
-    root_url "brew-bottles.open-geocomputing.org/"
-    rebuild 3
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "2cc06cf905cc402e2079def421505717dc39331d39068c7d3da8e2dffc78aedc"
-  end
-  
+  option "with-cuda", "Compile with cuda support"
   option "with-intel", "Use intel compiler if available (x86_64 only)"
   option "with-intel-static", "Use intel compiler if available (x86_64 only) and compile files without intel dependencies"
   
@@ -60,7 +56,9 @@ class G2s < Formula
 
   
   def install
-    findCuda
+    if build.with? "cuda"
+      findCuda
+    end
     intel_path=nil
 
     if build.with? "intel" or build.with? "intel-static"
