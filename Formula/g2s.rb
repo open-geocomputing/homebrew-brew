@@ -8,7 +8,7 @@ class G2s < Formula
     
   bottle do
     root_url "brew-bottles.open-geocomputing.org/"
-    rebuild 5
+    rebuild 1
     sha256 cellar: :any_skip_relocation, x86_64_linux: "37f5360bf1fabb33773c0081214f82b262168d95089a2cb061544034a8d63bc8"
   end
 
