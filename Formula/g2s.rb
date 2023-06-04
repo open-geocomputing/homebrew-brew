@@ -1,7 +1,7 @@
 class G2s < Formula
   desc "Toolbox for geostatistical simulations"
   homepage "https://gaia-unil.github.io/G2S/"
-  version "0.98.015"
+  version "0.98.018"
   url "https://github.com/GAIA-UNIL/G2S/archive/a55607bda0d4ec6aaae221b49b02d6e715b28b15.tar.gz"
   sha256 "42c4e5c0e87708c3adbe09d5f81f0941837bf345324a6a7b9978fc0f6a2586b6"
   license "GPL-3.0-only"
