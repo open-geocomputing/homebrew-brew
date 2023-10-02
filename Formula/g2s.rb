@@ -8,8 +8,8 @@ class G2s < Formula
     
   bottle do
     root_url "brew-bottles.open-geocomputing.org/"
-    rebuild 2
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "781c4b8214df7b82c7862522f88b1bc49786211467cb4be107deaf9ff912cae0"
+    rebuild 3
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "151e98e15e2612e48f7dcacc3a4ca267ae53ca6eacc45b987fd6e692d108bb85"
   end
   option "with-cuda", "Compile with cuda support"
   option "with-intel", "Use intel compiler if available (x86_64 only)"
